@@ -24,37 +24,6 @@ buildNumber.properties
 *.ipr
 out/
 
-
-# Build files
-build/
-dist/
-.gradle/
-*.class
-*.jar
-
-# OS
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
-.~*
-
-# Logs
-logs/
-*.log
-*.log.*
-
-# Database
-*.db
-*.sqlite
-*.h2.db
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
 # Temporary files
 temp/
 tmp/
