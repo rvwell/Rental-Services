@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.infnet</groupId>
+    <groupId>com.infnet</groupId>
     <artifactId>common</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -13,5 +13,15 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
+    <modules>
+        <module>../rental-service</module>
+        <module>../auth-service</module>
+        <module>../gateway-service</module>
+        <module>../insurance-service</module>
+        <module>../user-service</module>
+        <module>../notification-service</module>
+        <module>../product-service</module>
+    </modules>
+
 </project>
