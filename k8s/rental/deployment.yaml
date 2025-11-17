@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rental-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rental-service
+  template:
+    metadata:
+      labels:
+        app: rental-service
+    spec:
+      containers:
+        - name: rental-service
+          image: rental/rental-service:latest
+          ports:
+            - containerPort: 8084
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rental-secrets
+                  key: jwtSecret
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/rentaldb
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rental-secrets
+                  key: dbUser
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rental-secrets
+                  key: dbPassword
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rental-service
+spec:
+  selector:
+    app: rental-service
+  ports:
+    - port: 8084
+      targetPort: 8084
+  type: ClusterIP

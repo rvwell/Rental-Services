@@ -1,0 +1,6 @@
+CREATE DATABASE authdb;
+CREATE DATABASE userdb;
+CREATE DATABASE productdb;
+CREATE DATABASE rentaldb;
+CREATE DATABASE insurancedb;
+CREATE DATABASE notificationdb;

@@ -1,0 +1,104 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../compose/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  zipkin:
+    image: openzipkin/zipkin:2.24
+    ports:
+      - "9411:9411"
+  gateway-service:
+    build:
+      context: ../gateway-service
+      dockerfile: ../docker/Dockerfile.gateway-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - user-service
+      - product-service
+      - rental-service
+      - insurance-service
+      - notification-service
+  auth-service:
+    build:
+      context: ../auth-service
+      dockerfile: ../docker/Dockerfile.auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8081:8081"
+    depends_on:
+      - user-service
+  user-service:
+    build:
+      context: ../user-service
+      dockerfile: ../docker/Dockerfile.user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+  product-service:
+    build:
+      context: ../product-service
+      dockerfile: ../docker/Dockerfile.product-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - rabbitmq
+  rental-service:
+    build:
+      context: ../rental-service
+      dockerfile: ../docker/Dockerfile.rental-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+      - rabbitmq
+  insurance-service:
+    build:
+      context: ../insurance-service
+      dockerfile: ../docker/Dockerfile.insurance-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret-change-me-32-bytes-minimum-aaaa
+    ports:
+      - "8085:8085"
+    depends_on:
+      - rabbitmq
+  notification-service:
+    build:
+      context: ../notification-service
+      dockerfile: ../docker/Dockerfile.notification-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: local-secret
+    ports:
+      - "8086:8086"
+    depends_on:
+      - rabbitmq

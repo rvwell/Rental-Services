@@ -1,0 +1,27 @@
+server:
+  port: 8086
+spring:
+  application:
+    name: notification-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+  cloud:
+    stream:
+      bindings:
+        productEvents-in-0:
+          destination: product.events
+        rentalEvents-in-0:
+          destination: rental.events
+        rentalEventsDlq-out-0:
+          destination: rental.events.dlq
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  tracing:
+    enabled: true
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans

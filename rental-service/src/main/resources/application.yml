@@ -1,0 +1,45 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: rental-service
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            product-service:
+              - uri: http://product-service:8083
+            user-service:
+              - uri: http://user-service:8082
+    stream:
+      bindings:
+        rentalRequested-out-0:
+          destination: rental.events
+        approveRentalCommand-in-0:
+          destination: rental.commands
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rentaldb
+    username: postgres
+    password: postgres
+  rabbitmq:
+    host: localhost
+    port: 5672
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  tracing:
+    enabled: true
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+jwt:
+  secret: ${JWT_SECRET:local-secret}

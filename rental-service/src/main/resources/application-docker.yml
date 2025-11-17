@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/rentaldb
+    username: postgres
+    password: postgres
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
